@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.jiyun.mapper.EmpMapper">
+<select id="queryAllEmp" resultType="empVo" parameterType="empVo">
+select e.*,d.dname dname,c1.cname shengname,c2.cname shiname,
+c3.cname quname
+from emp e,dept d,city c1,city c2,city c3
+<where>
+e.did=d.did and 
+e.shengid=c1.cid AND
+e.shiid=c2.cid and
+e.quid=c3.cid 
+<if test="ename!='' and ename!=null">
+	and e.ename like '%${ename}%'
+</if>
+<if test="birthday!='' and birthday!=null">
+	and e.birthday = #{birthday}
+</if>
+</where>
+order by e.eid 
+</select>
+<delete id="deleteEmp">
+	delete from emp 
+	<where>
+		<foreach collection="array" open="eid in(" close=")" item="eids" separator=",">
+			#{eids}
+		</foreach>
+	</where>
+</delete>
+</mapper>
